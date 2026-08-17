@@ -1,0 +1,18 @@
+[identity]
+harness_id = ""
+model = ""
+model_provider = ""
+harness_commit = ""
+
+[instructions]
+system_prompt_sha256 = ""
+preset_sha256 = ""
+context_policy_sha256 = ""
+
+[tools]
+plugins = []
+permissions_sha256 = ""
+
+[runtime]
+launcher = []
+reasoning_effort = ""

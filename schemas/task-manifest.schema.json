@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/harnessbench/task-manifest.schema.json",
+  "title": "Harness benchmark task manifest",
+  "type": "object",
+  "required": ["task", "limits", "evaluator"],
+  "properties": {
+    "task": {
+      "type": "object",
+      "required": ["id", "slug", "title", "version", "language"]
+    },
+    "limits": {
+      "type": "object",
+      "required": ["timeout_seconds", "evaluator_timeout_seconds", "memory_mb", "cpu_count"]
+    },
+    "evaluator": {
+      "type": "object",
+      "required": ["ship_ready_score", "private_scorer"]
+    }
+  }
+}

@@ -1,0 +1,11 @@
+[dataset]
+id = "minimal-3"
+version = "0.1.0"
+title = "Minimal harness probe"
+one_shot = true
+
+tasks = [
+  "m1-reservation-repair",
+  "m2-microscheduler-12",
+  "m3-durable-lease-queue",
+]

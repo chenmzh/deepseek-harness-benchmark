@@ -1,0 +1,23 @@
+{
+  "benchmark_version": "0.1.0",
+  "dataset": "minimal-3",
+  "harness_id": "replace-with-frozen-harness-id",
+  "session_id": "replace-with-unique-session-id",
+  "status": "completed",
+  "wall_time_seconds": 0,
+  "model_active_seconds": null,
+  "usage": {
+    "input_tokens": 0,
+    "cached_input_tokens": 0,
+    "output_tokens": 0,
+    "reasoning_tokens": 0,
+    "credits": null,
+    "api_equivalent_cost_usd": null
+  },
+  "tooling": {
+    "tool_calls": 0,
+    "failed_tool_calls": 0,
+    "test_cycles": 0,
+    "human_interventions": 0
+  }
+}

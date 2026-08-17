@@ -1,0 +1,16 @@
+[task]
+id = "M2"
+slug = "microscheduler-12"
+title = "MicroScheduler-12"
+version = "0.1.0"
+language = "python"
+
+[limits]
+timeout_seconds = 1500
+evaluator_timeout_seconds = 90
+memory_mb = 2048
+cpu_count = 2
+
+[evaluator]
+ship_ready_score = 85
+private_scorer = "m2-microscheduler-12/score.py"

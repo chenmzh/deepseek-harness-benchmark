@@ -1,0 +1,16 @@
+[task]
+id = "M1"
+slug = "reservation-repair"
+title = "Reservation Repair"
+version = "0.1.0"
+language = "python"
+
+[limits]
+timeout_seconds = 1500
+evaluator_timeout_seconds = 60
+memory_mb = 2048
+cpu_count = 2
+
+[evaluator]
+ship_ready_score = 85
+private_scorer = "m1-reservation-repair/score.py"
