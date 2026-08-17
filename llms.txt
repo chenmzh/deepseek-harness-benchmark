@@ -1,0 +1,23 @@
+# DeepSeek Harness Benchmark
+
+Purpose: deterministic repository-level evaluation of complete model-harness configurations.
+
+Primary agent instructions: ./AGENTS.md
+Human overview in Chinese: ./README.zh-CN.md
+Human overview in English: ./README.md
+Task authoring: ./docs/authoring.md
+Run protocol: ./docs/operations.md
+Metrics contract: ./docs/metrics.md
+Chinese docs: ./docs/zh-CN/
+Public datasets: ./datasets/
+Private evaluators: ./private/hidden-tests/
+Reference solutions: ./private/reference-solutions/
+Result schemas: ./schemas/
+
+Critical boundary: never copy or expose ./private to an evaluated agent. Prepare an isolated workspace with `harnessbench prepare`, stop the agent, then evaluate externally.
+Decision order: invalid/critical failures, ShipReady count, completion, optimization quality, then time/tokens/credits among similarly complete runs.
+
+Canonical checks:
+1. `PYTHONPATH=src python3 -m harnessbench validate datasets/minimal-3`
+2. `PYTHONPATH=src python3 -m unittest discover -s tests -v`
+3. `git diff --check`
