@@ -1,7 +1,7 @@
 [dataset]
 id = "minimal-3"
-version = "0.1.0"
-title = "Minimal harness probe"
+version = "0.2.0"
+title = "Minimal development harness probe"
 one_shot = true
 
 tasks = [
