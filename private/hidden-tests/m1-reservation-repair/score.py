@@ -105,7 +105,9 @@ def case_invariant_sequence(service_type, _not_found, root: Path) -> None:
 def case_atomic_replace(service_type, _not_found, root: Path) -> None:
     database = root / "nested" / "db.json"
     service = service_type(database, {"a": 3})
+    original_inode = database.stat().st_ino
     service.reserve("a", 1, "r1")
+    assert database.stat().st_ino != original_inode, "database was overwritten in place"
     parsed = json.loads(database.read_text(encoding="utf-8"))
     assert parsed["available"]["a"] == 2
     leftovers = [p for p in database.parent.iterdir() if p != database]
@@ -135,7 +137,7 @@ def main() -> int:
             "completion_score": 0,
             "critical_failures": [f"public API unavailable: {type(exc).__name__}: {exc}"],
             "capabilities": {},
-            "evaluator": {"version": "0.1.0"},
+            "evaluator": {"version": "0.2.0"},
         }))
         return 0
 
@@ -159,7 +161,7 @@ def main() -> int:
         "completion_score": round(total, 2),
         "critical_failures": critical,
         "capabilities": details,
-        "evaluator": {"version": "0.1.0"},
+        "evaluator": {"version": "0.2.0"},
     }))
     return 0
 

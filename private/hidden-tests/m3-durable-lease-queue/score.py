@@ -83,7 +83,9 @@ def retry_and_dead_letter(queue_type, _missing, _conflict, root: Path) -> None:
 def persistence(queue_type, _missing, _conflict, root: Path) -> None:
     database = root / "nested" / "q.json"
     queue = queue_type(database)
+    original_inode = database.stat().st_ino
     job = queue.enqueue({"nested": [1, 2]}, "k")
+    assert database.stat().st_ino != original_inode, "database was overwritten in place"
     queue.claim("a", 5, 10)
     restarted = queue_type(database)
     row = next(item for item in restarted.jobs() if item["id"] == job["id"])
@@ -124,7 +126,7 @@ def main() -> int:
     try:
         api = load_api(args.submission.resolve())
     except Exception as exc:
-        print(json.dumps({"completion_score": 0, "critical_failures": [f"public API unavailable: {type(exc).__name__}: {exc}"], "capabilities": {}, "evaluator": {"version": "0.1.0"}}))
+        print(json.dumps({"completion_score": 0, "critical_failures": [f"public API unavailable: {type(exc).__name__}: {exc}"], "capabilities": {}, "evaluator": {"version": "0.2.0"}}))
         return 0
 
     total = 0.0
@@ -147,7 +149,7 @@ def main() -> int:
         critical.append("basic queue state machine is unavailable")
     if details["lease_semantics"]["passed"] == 0:
         critical.append("lease exclusivity is unavailable")
-    print(json.dumps({"completion_score": round(total, 2), "critical_failures": critical, "capabilities": details, "evaluator": {"version": "0.1.0"}}))
+    print(json.dumps({"completion_score": round(total, 2), "critical_failures": critical, "capabilities": details, "evaluator": {"version": "0.2.0"}}))
     return 0
 
 
