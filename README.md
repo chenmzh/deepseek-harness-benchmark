@@ -4,22 +4,24 @@ English | [中文](README.zh-CN.md) | [Agent/AI instructions](AGENTS.md)
 
 Deterministic, repository-level benchmarks for measuring how harness design changes an agent's delivery quality, latency, token use, and cost.
 
-> Status: early development. `minimal-3` is the first implemented probe set; larger sealed datasets remain specifications until the probe framework is validated.
+> Status: early development. `minimal-3` is the first implemented **public development probe**. It is intended for cheap harness iteration and regression testing, not as an independent sealed selection set. Larger sealed datasets remain specifications until the probe framework is validated.
 
 ## Design principles
 
 - Evaluate a complete model–harness configuration, not a model name in isolation.
 - Treat delivery quality as a gate and time/tokens/cost as separate efficiency dimensions.
-- Keep hidden evaluators outside the agent workspace.
-- Freeze task inputs, evaluator versions, limits, and result schemas before a run.
-- Do not rerun valid probe failures. Only infrastructure-invalid runs may be repeated.
+- Keep evaluators outside the agent workspace during a run.
+- Keep true selection/final evaluators outside repositories and environments accessible to the tested agent until the comparison is complete.
+- Freeze task inputs, evaluator versions, limits, result schemas, and the run mode before a run.
+- In probe mode, do not rerun valid failures. In confirm mode, use only repetitions declared before seeing outcomes.
 - Prefer deterministic local tests over LLM judging.
 
 ## Repository layout
 
 ```text
 datasets/                  Public task definitions and starter repositories
-private/hidden-tests/      Evaluators never copied into the agent workspace
+private/hidden-tests/      Public development evaluators; never copied into the agent workspace
+private/reference-solutions/ Development references; not sealed evidence
 src/harnessbench/          Dataset validation, workspace preparation and evaluation CLI
 schemas/                   Machine-readable contracts
 docs/                      Authoring, operation and instruction guidance
@@ -48,10 +50,16 @@ When running from a checkout without installing the package, prefix commands wit
 | M2 | MicroScheduler-12 | Constraint modelling and bounded optimization |
 | M3 | Durable Lease Queue | Greenfield completeness and crash-safe state transitions |
 
-See [`docs/operations.md`](docs/operations.md) for the one-shot protocol, [`docs/authoring.md`](docs/authoring.md) for adding tasks, and [`docs/metrics.md`](docs/metrics.md) for result semantics.
+`minimal-3` is designed to be cheap enough for frequent one-shot probe runs. Once a task result influences a harness change, keep using that task for regression testing but do not count it as independent evidence for selecting the final harness.
+
+Tasks may declare `required_capabilities` in `task.toml`. These are hard ShipReady gates: aggregate score cannot compensate for missing a capability that makes the artifact fundamentally unshippable.
+
+See [`docs/operations.md`](docs/operations.md) for probe and confirm protocols, [`docs/authoring.md`](docs/authoring.md) for adding tasks, and [`docs/metrics.md`](docs/metrics.md) for result semantics.
 
 AI systems should begin with [`AGENTS.md`](AGENTS.md) for repository rules or [`llms.txt`](llms.txt) for a compact document index.
 
 ## Security boundary
 
-The prepared workspace contains only `TASK.md`, `starter/`, and public material. Never mount `private/hidden-tests` into the agent environment. Run evaluation only after the agent session has stopped and the workspace has been snapshotted.
+The prepared workspace contains only `TASK.md`, `starter/`, and public material. Never mount `private/hidden-tests` or `private/reference-solutions` into the agent environment. Run evaluation only after the agent session has stopped and the workspace has been snapshotted.
+
+The `private/` directory in this public repository is a workspace-isolation boundary for development probes, not a secrecy boundary. For true sealed selection or confidence runs, store evaluators and reference material somewhere the tested agent cannot access, record their hashes before execution, and disclose them only after the comparison if desired.

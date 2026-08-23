@@ -10,11 +10,14 @@ Run protocol: ./docs/operations.md
 Metrics contract: ./docs/metrics.md
 Chinese docs: ./docs/zh-CN/
 Public datasets: ./datasets/
-Private evaluators: ./private/hidden-tests/
-Reference solutions: ./private/reference-solutions/
+Public development evaluators (workspace-hidden, not sealed): ./private/hidden-tests/
+Development reference solutions (not sealed evidence): ./private/reference-solutions/
 Result schemas: ./schemas/
 
 Critical boundary: never copy or expose ./private to an evaluated agent. Prepare an isolated workspace with `harnessbench prepare`, stop the agent, then evaluate externally.
+Sealed boundary: keep true selection and final-confidence evaluators outside repositories and environments accessible to the tested agent until the comparison finishes.
+Run modes: use one-shot probe mode for development; predeclare all repetitions and comparison rules for confirm mode before seeing outcomes.
+ShipReady gates: every capability named in `required_capabilities` must earn its full weight.
 Decision order: invalid/critical failures, ShipReady count, completion, optimization quality, then time/tokens/credits among similarly complete runs.
 
 Canonical checks:

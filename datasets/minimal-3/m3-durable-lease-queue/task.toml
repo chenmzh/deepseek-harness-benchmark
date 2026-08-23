@@ -2,7 +2,7 @@
 id = "M3"
 slug = "durable-lease-queue"
 title = "Durable Lease Queue"
-version = "0.1.0"
+version = "0.2.0"
 language = "python"
 
 [limits]
@@ -14,3 +14,4 @@ cpu_count = 2
 [evaluator]
 ship_ready_score = 85
 private_scorer = "m3-durable-lease-queue/score.py"
+required_capabilities = ["restart_and_persistence"]

@@ -29,6 +29,28 @@ def tree_digest(root: Path) -> str:
     return digest.hexdigest()
 
 
+def _required_capability_failures(
+    required: tuple[str, ...], capabilities: Any
+) -> list[str]:
+    if not isinstance(capabilities, dict):
+        return [f"required capability unavailable: {name}" for name in required]
+
+    failures: list[str] = []
+    for name in required:
+        detail = capabilities.get(name)
+        if not isinstance(detail, dict):
+            failures.append(f"required capability unavailable: {name}")
+            continue
+        earned = detail.get("earned")
+        weight = detail.get("weight")
+        if not isinstance(earned, (int, float)) or not isinstance(weight, (int, float)):
+            failures.append(f"required capability has invalid score metadata: {name}")
+            continue
+        if earned != weight:
+            failures.append(f"required capability incomplete: {name} ({earned:g}/{weight:g})")
+    return failures
+
+
 def evaluate_submission(
     manifest: TaskManifest,
     submission: str | Path,
@@ -74,6 +96,9 @@ def evaluate_submission(
     if not isinstance(critical, list) or not all(isinstance(item, str) for item in critical):
         raise EvaluationError("critical_failures must be a list of strings")
 
+    capabilities = score.get("capabilities", {})
+    critical = [*critical, *_required_capability_failures(manifest.required_capabilities, capabilities)]
+
     result: dict[str, Any] = {
         "schema_version": "0.1",
         "evaluated_at": datetime.now(timezone.utc).isoformat(),
@@ -83,7 +108,7 @@ def evaluate_submission(
         "completion_score": completion,
         "ship_ready": completion >= manifest.ship_ready_score and not critical,
         "critical_failures": critical,
-        "capabilities": score.get("capabilities", {}),
+        "capabilities": capabilities,
         "evaluator": score.get("evaluator", {}),
     }
     for key in ("optimizer_quality", "notes"):

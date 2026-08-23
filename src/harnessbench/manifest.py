@@ -24,6 +24,7 @@ class TaskManifest:
     cpu_count: int
     ship_ready_score: float
     private_scorer: str
+    required_capabilities: tuple[str, ...]
 
     @property
     def task_dir(self) -> Path:
@@ -60,6 +61,15 @@ def _required(table: dict[str, Any], key: str, expected: type, source: Path) -> 
     return value
 
 
+def _string_array(table: dict[str, Any], key: str, source: Path) -> tuple[str, ...]:
+    value = table.get(key, [])
+    if not isinstance(value, list) or not all(isinstance(item, str) and item for item in value):
+        raise ManifestError(f"{source}: {key!r} must be an array of non-empty strings")
+    if len(value) != len(set(value)):
+        raise ManifestError(f"{source}: {key!r} must not contain duplicates")
+    return tuple(value)
+
+
 def load_task_manifest(task_dir: str | Path) -> TaskManifest:
     task_dir = Path(task_dir).resolve()
     path = task_dir / "task.toml"
@@ -86,6 +96,7 @@ def load_task_manifest(task_dir: str | Path) -> TaskManifest:
         cpu_count=_required(limits, "cpu_count", int, path),
         ship_ready_score=float(_required(evaluator, "ship_ready_score", int, path)),
         private_scorer=_required(evaluator, "private_scorer", str, path),
+        required_capabilities=_string_array(evaluator, "required_capabilities", path),
     )
     validate_task_files(manifest)
     return manifest

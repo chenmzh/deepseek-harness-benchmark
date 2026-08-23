@@ -27,6 +27,8 @@ Do not read unrelated hidden tests merely to solve a public task. Repository mai
 - MUST NOT mark a valid model timeout, harness crash, or poor solution as an infrastructure-invalid run.
 - MUST NOT modify test results, traces, usage ledgers, or evaluator output to improve a score.
 - MUST preserve deterministic behavior and standard-library-only runtime unless a task manifest explicitly says otherwise.
+- MUST predeclare probe or confirm mode before execution; confirm repetitions and comparison rules must be frozen before seeing outcomes.
+- MUST keep true selection and final-confidence evaluators outside repositories and environments accessible to the tested agent until comparisons finish.
 
 ## Source-of-truth map
 
@@ -49,14 +51,15 @@ When two files disagree, repair the inconsistency at the canonical source and up
 Follow this order:
 
 1. Write a capability map with explicit weights totaling 100.
-2. Write the complete public behavioral contract.
-3. Add a deliberately incomplete but runnable starter.
-4. Add public smoke tests that establish the interface without revealing hidden cases.
-5. Add a private reference solution.
-6. Add deterministic hidden cases for normal behavior, boundaries, failures, invariants, restart behavior, and regression.
-7. Score the untouched starter, reference solution, and at least two incomplete mutations.
-8. Require the reference solution to be ShipReady and the untouched starter not to be ShipReady.
-9. Freeze targets and increment versions for any scoring-semantic change.
+2. Identify fundamentally unshippable gaps and declare their capability names in `required_capabilities`.
+3. Write the complete public behavioral contract.
+4. Add a deliberately incomplete but runnable starter.
+5. Add public smoke tests that establish the interface without revealing hidden cases.
+6. Add a private reference solution.
+7. Add deterministic hidden cases for normal behavior, boundaries, failures, invariants, restart behavior, and regression.
+8. Score the untouched starter, reference solution, and at least two incomplete mutations, including mutations that fail every required capability.
+9. Require the reference solution to be ShipReady and the untouched starter not to be ShipReady.
+10. Freeze targets and increment versions for any scoring-semantic or ShipReady-gate change.
 
 For optimization tasks, feasibility is a gate. Compare objective quality against a frozen deterministic baseline and a reviewed best-known target or valid oracle. Keep instance generation deterministic and resource-bounded.
 
@@ -66,6 +69,7 @@ For optimization tasks, feasibility is a gate. Compare objective quality against
 validate dataset
 → prepare fresh workspace
 → verify private material is absent
+→ record the predeclared run mode and confirm repetitions
 → run exactly one isolated agent session
 → stop and snapshot the workspace
 → run private evaluator externally
@@ -117,6 +121,7 @@ A repository change is complete only when:
 - repository self-tests pass;
 - reference solutions remain ShipReady;
 - starters remain below ShipReady unless a deliberate calibration change says otherwise;
+- at least two incomplete mutations, including every required capability, have the expected score and ShipReady result;
 - no private material appears in a prepared workspace;
 - documentation variants agree on commands, paths, versions, and safety boundaries;
 - the Git diff contains only intended files.
