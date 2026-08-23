@@ -1,5 +1,7 @@
 # DeepSeek Harness Benchmark
 
+English | [中文](README.zh-CN.md) | [Agent/AI instructions](AGENTS.md)
+
 Deterministic, repository-level benchmarks for measuring how harness design changes an agent's delivery quality, latency, token use, and cost.
 
 > Status: early development. `minimal-3` is the first implemented **public development probe**. It is intended for cheap harness iteration and regression testing, not as an independent sealed selection set. Larger sealed datasets remain specifications until the probe framework is validated.
@@ -53,6 +55,8 @@ When running from a checkout without installing the package, prefix commands wit
 Tasks may declare `required_capabilities` in `task.toml`. These are hard ShipReady gates: aggregate score cannot compensate for missing a capability that makes the artifact fundamentally unshippable.
 
 See [`docs/operations.md`](docs/operations.md) for probe and confirm protocols, [`docs/authoring.md`](docs/authoring.md) for adding tasks, and [`docs/metrics.md`](docs/metrics.md) for result semantics.
+
+AI systems should begin with [`AGENTS.md`](AGENTS.md) for repository rules or [`llms.txt`](llms.txt) for a compact document index.
 
 ## Security boundary
 
