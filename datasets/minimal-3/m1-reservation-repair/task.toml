@@ -2,7 +2,7 @@
 id = "M1"
 slug = "reservation-repair"
 title = "Reservation Repair"
-version = "0.1.0"
+version = "0.2.0"
 language = "python"
 
 [limits]
@@ -14,3 +14,4 @@ cpu_count = 2
 [evaluator]
 ship_ready_score = 85
 private_scorer = "m1-reservation-repair/score.py"
+required_capabilities = ["persistence_hygiene"]
