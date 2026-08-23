@@ -46,7 +46,7 @@ def _required_capability_failures(
         if not isinstance(earned, (int, float)) or not isinstance(weight, (int, float)):
             failures.append(f"required capability has invalid score metadata: {name}")
             continue
-        if earned < weight:
+        if earned != weight:
             failures.append(f"required capability incomplete: {name} ({earned:g}/{weight:g})")
     return failures
 
