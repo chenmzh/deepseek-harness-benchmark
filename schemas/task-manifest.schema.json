@@ -15,7 +15,17 @@
     },
     "evaluator": {
       "type": "object",
-      "required": ["ship_ready_score", "private_scorer"]
+      "required": ["ship_ready_score", "private_scorer"],
+      "properties": {
+        "ship_ready_score": {"type": "number", "minimum": 0, "maximum": 100},
+        "private_scorer": {"type": "string", "minLength": 1},
+        "required_capabilities": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true,
+          "default": []
+        }
+      }
     }
   }
 }
