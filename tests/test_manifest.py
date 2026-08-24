@@ -15,6 +15,12 @@ class ManifestTests(unittest.TestCase):
         self.assertEqual(dataset.version, "0.2.0")
         self.assertEqual(len(dataset.task_dirs), 3)
 
+    def test_quick_dataset_is_valid(self) -> None:
+        dataset = load_dataset_manifest(ROOT / "datasets" / "quick-3")
+        self.assertEqual(dataset.dataset_id, "quick-3")
+        self.assertEqual(dataset.version, "0.1.0")
+        self.assertEqual(len(dataset.task_dirs), 3)
+
     def test_required_capabilities_are_loaded(self) -> None:
         m1 = load_task_manifest(ROOT / "datasets" / "minimal-3" / "m1-reservation-repair")
         m3 = load_task_manifest(ROOT / "datasets" / "minimal-3" / "m3-durable-lease-queue")

@@ -22,5 +22,6 @@ Decision order: invalid/critical failures, ShipReady count, completion, optimiza
 
 Canonical checks:
 1. `PYTHONPATH=src python3 -m harnessbench validate datasets/minimal-3`
-2. `PYTHONPATH=src python3 -m unittest discover -s tests -v`
-3. `git diff --check`
+2. `PYTHONPATH=src python3 -m harnessbench validate datasets/quick-3`
+3. `PYTHONPATH=src python3 -m unittest discover -s tests -v`
+4. `git diff --check`

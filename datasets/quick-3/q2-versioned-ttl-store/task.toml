@@ -1,0 +1,17 @@
+[task]
+id = "Q2"
+slug = "versioned-ttl-store"
+title = "Versioned TTL Store"
+version = "0.1.0"
+language = "python"
+
+[limits]
+timeout_seconds = 240
+evaluator_timeout_seconds = 45
+memory_mb = 512
+cpu_count = 1
+
+[evaluator]
+ship_ready_score = 85
+private_scorer = "q2-versioned-ttl-store/score.py"
+required_capabilities = ["request_idempotency", "restart_and_atomic_persistence"]

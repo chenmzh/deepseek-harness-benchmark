@@ -43,6 +43,16 @@ llms.txt                   AI 的最短文档索引
 PYTHONPATH=src python3 -m harnessbench validate datasets/minimal-3
 ```
 
+## Quick-3
+
+| ID | 任务 | 主要测量内容 | Agent 预算 |
+|---|---|---|---:|
+| Q1 | Layered Config | 递归合并、删除、验证和隔离 | 240 秒 |
+| Q2 | Versioned TTL Store | CAS、过期、幂等和原子持久化 | 240 秒 |
+| Q3 | Async Single-flight Cache | 请求合并、陈旧刷新、取消和失效 | 240 秒 |
+
+`quick-3` 是以 Luna max 为最低校准基线的短时公开开发探针。每题统一使用四分钟 Agent 预算，用于快速暴露交付质量差异；质量和耗时仍作为独立指标报告。详见[校准记录](datasets/quick-3/CALIBRATION.md)。
+
 ## Minimal-3
 
 | ID | 任务 | 主要测量内容 |

@@ -1,0 +1,37 @@
+# DSH overlay for the Quick-3 Luna max calibration floor.
+- id: agent-default-model
+  config:
+    provider: openai-codex
+    model: gpt-5.6-luna
+    reasoningEffort: max
+- id: permission
+  config:
+    defaultPreset: workspace-write
+- id: reasoning-router
+  config:
+    teamEnabled: true
+    presetIds: []
+    roles:
+      - id: brain
+        kind: advisory
+        description: Deep tool-less reasoning and architecture advice.
+        provider: openai-codex
+        model: gpt-5.6-luna
+        reasoningEffort: max
+        maxTokens: 3000
+      - id: coordinator
+        kind: advisory
+        description: Decomposition, assignment, integration, and risk control.
+        provider: openai-codex
+        model: gpt-5.6-luna
+        reasoningEffort: max
+        maxTokens: 2200
+      - id: worker
+        kind: subagent
+        description: Tool-capable implementation and verification worker.
+        provider: openai-codex
+        model: gpt-5.6-luna
+        reasoningEffort: max
+        subagentProvider: spawn
+        maxDepth: 2
+    requiredPresetId: ""

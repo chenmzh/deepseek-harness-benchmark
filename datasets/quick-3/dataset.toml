@@ -1,0 +1,11 @@
+[dataset]
+id = "quick-3"
+version = "0.1.0"
+title = "Short-horizon stratified harness probe"
+one_shot = true
+
+tasks = [
+  "q1-layered-config",
+  "q2-versioned-ttl-store",
+  "q3-async-singleflight-cache",
+]

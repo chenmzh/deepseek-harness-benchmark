@@ -42,6 +42,16 @@ python -m harnessbench assemble result.json examples/run-metadata.json --output 
 
 When running from a checkout without installing the package, prefix commands with `PYTHONPATH=src`.
 
+## Quick-3
+
+| ID | Task | Primary signal | Agent budget |
+|---|---|---|---:|
+| Q1 | Layered Config | Recursive merge, deletion, validation, isolation | 240 s |
+| Q2 | Versioned TTL Store | CAS, expiry, idempotency, atomic persistence | 240 s |
+| Q3 | Async Single-flight Cache | Coalescing, stale refresh, cancellation, invalidation | 240 s |
+
+`quick-3` is a short-horizon public development probe calibrated with Luna max as the floor. Its uniform four-minute task budget is intended to expose delivery-quality differences quickly; quality and elapsed time remain separate metrics. See its [calibration record](datasets/quick-3/CALIBRATION.md).
+
 ## Minimal-3
 
 | ID | Task | Primary signal |

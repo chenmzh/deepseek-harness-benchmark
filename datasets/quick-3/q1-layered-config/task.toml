@@ -1,0 +1,16 @@
+[task]
+id = "Q1"
+slug = "layered-config"
+title = "Layered Config"
+version = "0.1.0"
+language = "python"
+
+[limits]
+timeout_seconds = 240
+evaluator_timeout_seconds = 30
+memory_mb = 512
+cpu_count = 1
+
+[evaluator]
+ship_ready_score = 85
+private_scorer = "q1-layered-config/score.py"

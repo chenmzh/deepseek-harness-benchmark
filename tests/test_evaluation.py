@@ -9,6 +9,7 @@ from harnessbench.manifest import load_task_manifest
 
 ROOT = Path(__file__).resolve().parents[1]
 DATASET = ROOT / "datasets" / "minimal-3"
+QUICK_DATASET = ROOT / "datasets" / "quick-3"
 PRIVATE = ROOT / "private" / "hidden-tests"
 REFERENCES = ROOT / "private" / "reference-solutions"
 
@@ -17,6 +18,10 @@ class EvaluationTests(unittest.TestCase):
     def score(self, task_dir: str, reference_dir: str) -> dict:
         manifest = load_task_manifest(DATASET / task_dir)
         return evaluate_submission(manifest, REFERENCES / reference_dir, PRIVATE)
+
+    def score_quick(self, task_dir: str, submission: Path) -> dict:
+        manifest = load_task_manifest(QUICK_DATASET / task_dir)
+        return evaluate_submission(manifest, submission, PRIVATE)
 
     def test_required_capability_must_receive_full_weight(self) -> None:
         capabilities = {"durability": {"earned": 14, "weight": 15}}
@@ -80,6 +85,21 @@ class EvaluationTests(unittest.TestCase):
     def test_m3_reference_is_ship_ready(self) -> None:
         result = self.score("m3-durable-lease-queue", "m3-durable-lease-queue")
         self.assertTrue(result["ship_ready"], result)
+
+
+    def test_quick3_references_are_ship_ready_and_starters_are_not(self) -> None:
+        for task in (
+            "q1-layered-config",
+            "q2-versioned-ttl-store",
+            "q3-async-singleflight-cache",
+        ):
+            with self.subTest(task=task, submission="reference"):
+                result = self.score_quick(task, REFERENCES / task)
+                self.assertEqual(result["completion_score"], 100.0, result)
+                self.assertTrue(result["ship_ready"], result)
+            with self.subTest(task=task, submission="starter"):
+                result = self.score_quick(task, QUICK_DATASET / task / "starter")
+                self.assertFalse(result["ship_ready"], result)
 
 
 if __name__ == "__main__":
